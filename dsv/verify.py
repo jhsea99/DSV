@@ -1,12 +1,13 @@
-"""The P1 verdict on one image.
+"""The DSV verdict on one image: two pieces of evidence, combined.
 
-For a phrase p:
-  m   log-odds of yes over no for the question "Is there a p in the image?" (fresh context, the system prompt and image
-      encoded once per image);
-  c   the number of the K sampled captions that contain a form of p's head word; lo = log((c + 1) / (K - c + 1));
-  m2  the same question on a quarter-side crop around the similarity peak of p, asked only when m + lo < 0;
-  s   = (max(m, m2) if m + lo < 0 else m) + lo. The phrase is accepted when s >= 0.
-In odds: the question's odds times the samples' odds, with a second look at the most similar region before rejecting.
+For an object X:
+  m   context-detached question: the log-odds of Yes over No for "Is there a X in the image?", asked with the image in a
+      new context without the caption (the system prompt and image are encoded once per image);
+  c   sample consensus: how many of the K captions sampled at temperature 1.2 mention X; l = log((c + 1) / (K - c + 1));
+  m2  crop question: when m + l < 0, the same question on a quarter-side crop around the point where the layer-8
+      image-token states are most similar to "a photo of a X";
+  s   = (max(m, m2) if m + l < 0 else m) + l. X is rejected when s < 0.
+s >= 0 means the question's odds times the samples' odds is at least 1 (sigmoid(s) >= 1/2).
 """
 
 from __future__ import annotations

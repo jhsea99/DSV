@@ -1,7 +1,7 @@
-"""Accuracy, precision, recall and F1 (yes = positive) of scripts/pope.py outputs, per question file, for P1 and for the
+"""Accuracy, precision, recall and F1 (yes = positive) of scripts/pope.py outputs, per question file, for DSV and for the
 plain LLaVA answer on the same logits (greedy).
 
-    python scripts/eval_pope.py outputs/pope_coco_p1.jsonl
+    python scripts/eval_pope.py outputs/pope_coco_dsv.jsonl
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ def main() -> None:
         rows = groups[name]
         for method in ("greedy", "answer"):
             s = scores([(r[method] == "yes", r["label"] == "yes") for r in rows])
-            label = "P1" if method == "answer" else "greedy"
+            label = "DSV" if method == "answer" else "greedy"
             print(f"{name:40s} {label:7s} {100 * s['accuracy']:6.2f} {100 * s['precision']:6.2f} {100 * s['recall']:6.2f} "
                   f"{100 * s['f1']:6.2f} {s['n']:6d}")
 

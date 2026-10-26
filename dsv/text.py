@@ -1,4 +1,4 @@
-"""Prompts and model-free text helpers of P1."""
+"""Prompts and model-free text helpers of DSV."""
 
 from __future__ import annotations
 
@@ -59,7 +59,7 @@ def parse_phrases(text: str, max_items: int = 15) -> list[str]:
 
 
 def question(phrase: str) -> str:
-    """The POPE-style question P1 asks about a phrase."""
+    """The POPE-style question DSV asks about a phrase."""
     h = head(phrase)
     if h.endswith("s") and not h.endswith(("ss", "us", "is")):
         return f"Are there {phrase} in the image?"

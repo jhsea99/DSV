@@ -1,15 +1,16 @@
-"""P1 caption decoding.
+"""DSV caption decoding: the sentence-level verification loop and evidence-weighted rewriting.
 
 The caption is written greedily, one sentence at a time. At each sentence end:
   1. the model lists, text only, the physical objects the sentence mentions (a listed phrase is kept only when its head
      word occurs in the sentence);
-  2. each phrase gets the P1 verdict (p1/verify.py);
-  3. if a phrase is rejected, its words are banned for the rest of the caption, the sentence is rewound to its start and
-     rewritten. While rewriting, every candidate token that begins a noun (nltk NN / NNS under a two-word greedy lookahead)
-     gets log sigmoid(s) of that noun added to its logit, so the rewrite prefers objects the verdict supports;
+  2. each object gets the DSV verdict (dsv/verify.py);
+  3. if an object is rejected, the singular and plural forms of its word are banned for the rest of the caption and the
+     sentence is rewound to its start and rewritten. While rewriting, every candidate token that begins a noun (nltk NN /
+     NNS under a two-word greedy lookahead) gets log sigmoid(s) of that noun added to its logit, so the rewrite prefers
+     objects with evidence;
   4. a sentence is rewritten at most three times; a rewrite that repeats an earlier version is accepted as is.
-"caption" is the decoded text. "caption_withheld" leaves out the sentences that were still rejected after rewriting (the
-model's context is unchanged: it continues as if it had said them).
+"caption" is the decoded text. "caption_withheld" (optional, not used in the paper) leaves out the sentences that were
+still rejected after rewriting; the model's context is unchanged.
 """
 
 from __future__ import annotations

@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "p1-decoding"
+name = "dsv"
 version = "1.0.0"
-description = "P1: training-free object-hallucination reduction for LLaVA-1.5 by verified rollback decoding"
+description = "Mitigating Object Hallucination in Vision-Language Models via Context-Detached Self-Verification (DSV)"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -18,4 +18,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["p1"]
+packages = ["dsv"]

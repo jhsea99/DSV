@@ -1,11 +1,11 @@
-"""P1 captions for a list of images, one JSON row per image (resumable; shard over GPUs with --shard / --num-shards).
+"""DSV captions for a list of images, one JSON row per image (resumable; shard over GPUs with --shard / --num-shards).
 
     # your own images
     python scripts/caption.py --images photo1.jpg photo2.jpg --out outputs/captions.jsonl
 
     # CHAIR on OPERA's 500 COCO val2014 images (the paper setting)
     python scripts/caption.py --image-dir /path/to/coco/val2014 --image-ids data/chair_500_image_ids.txt \\
-        --out outputs/chair_p1.jsonl
+        --out outputs/chair_dsv.jsonl
 
 Rows: {image_id, image, caption, caption_withheld, samples, sentences, verdicts, stats, n_tokens, seconds}.
 The sampling seed is the image id (the digits at the end of the file name, as in COCO), otherwise --seed.
@@ -22,7 +22,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from p1 import P1  # noqa: E402
+from dsv import DSV  # noqa: E402
 
 COCO_NAME = "COCO_val2014_{:012d}.jpg"
 
@@ -61,12 +61,12 @@ def main() -> None:
     todo = [p for p in paths if p.name not in done]
     print(f"[shard {args.shard}] {len(todo)} images to caption", flush=True)
 
-    p1 = P1.from_pretrained(args.model, vision_tower=args.vision_tower, preprocess=args.preprocess)
+    dsv = DSV.from_pretrained(args.model, vision_tower=args.vision_tower, preprocess=args.preprocess)
     with open(out, "a", encoding="utf-8") as f:
         for n, path in enumerate(todo, start=1):
             image = Image.open(path).convert("RGB")
             seed = image_seed(path, args.seed)
-            res = p1.caption(image, seed=seed)
+            res = dsv.caption(image, seed=seed)
             row = {"image_id": seed, "image": path.name, **res}
             f.write(json.dumps(row) + "\n")
             f.flush()

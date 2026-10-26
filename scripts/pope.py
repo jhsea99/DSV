@@ -1,13 +1,13 @@
-"""P1 answers to POPE questions. Every (image, object) pair in the given question files is verified once (the splits share
+"""DSV answers to POPE questions. Every (image, object) pair in the given question files is verified once (the splits share
 images and positive objects), then each question gets that verdict. Resumable per image; shard over GPUs with --shard /
 --num-shards.
 
     python scripts/pope.py --questions coco_pope_random.json coco_pope_popular.json coco_pope_adversarial.json \\
-        --image-dir /path/to/coco/val2014 --out outputs/pope_coco_p1.jsonl
-    python scripts/eval_pope.py outputs/pope_coco_p1.jsonl
+        --image-dir /path/to/coco/val2014 --out outputs/pope_coco_dsv.jsonl
+    python scripts/eval_pope.py outputs/pope_coco_dsv.jsonl
 
 The question files are POPE's own (github.com/RUCAIBox/POPE, output/coco and output/seem): JSON lines or one JSON array of
-{question_id, image, text, label}. P1 asks question(object) for the object named in the text, with LLaVA-1.5's POPE
+{question_id, image, text, label}. DSV asks question(object) for the object named in the text, with LLaVA-1.5's POPE
 instruction "Answer the question using a single word or phrase."
 Rows: {file, question_id, image, text, label, answer, greedy, s, m, c, m2}. The sampling seed is the image id (the digits at
 the end of the file name).
@@ -24,7 +24,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from p1 import P1  # noqa: E402
+from dsv import DSV  # noqa: E402
 
 OBJECT_RE = re.compile(r"(?:Is there an?|Are there) (.+?) in the im", re.IGNORECASE)
 
@@ -59,13 +59,13 @@ def main() -> None:
     todo = [im for im in images if im not in done]
     print(f"[shard {args.shard}] {len(todo)} images", flush=True)
 
-    p1 = P1.from_pretrained(args.model, vision_tower=args.vision_tower, preprocess=args.preprocess)
+    dsv = DSV.from_pretrained(args.model, vision_tower=args.vision_tower, preprocess=args.preprocess)
     with open(out, "a", encoding="utf-8") as f:
         for n, name in enumerate(todo, start=1):
             image = Image.open(Path(args.image_dir) / name).convert("RGB")
             seed = int(re.search(r"(\d+)$", Path(name).stem).group(1))
             objects = sorted({obj for _, _, obj in by_image[name]})
-            verdicts = p1.answer(image, objects, seed=seed)
+            verdicts = dsv.answer(image, objects, seed=seed)
             for fname, q, obj in by_image[name]:
                 v = verdicts[obj]
                 f.write(json.dumps({"file": fname, "question_id": q.get("question_id"), "image": name, "text": q["text"],
