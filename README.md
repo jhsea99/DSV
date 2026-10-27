@@ -77,7 +77,7 @@ Python 3.10 or 3.11 (tested with 3.11) and a CUDA GPU with 24 GB of memory (test
 23 GB).
 
 ```bash
-git clone <this repository> && cd <this repository>
+git clone https://github.com/jhsea99/DSV.git && cd DSV
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
 python -m nltk.downloader punkt_tab averaged_perceptron_tagger_eng
