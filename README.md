@@ -190,12 +190,16 @@ data/
 @inproceedings{kim2026dsv,
   title     = {Mitigating Object Hallucination in Vision-Language Models via Context-Detached Self-Verification},
   author    = {Kim, Ji-Won and Hwang, Hae-Won and Song, Byung-Cheol},
-  booktitle = {Proceedings of the 2026 Fall Conference},
+  booktitle = {Proceedings of the Autumn Annual Conference of IEIE},
   year      = {2026}
 }
 ```
 
-Korean title: 생성 문맥에서 분리된 자기 검증을 통한 시각-언어 모델의 객체 환각 완화.
+Korean title: 생성 문맥에서 분리된 자기 검증을 통한 시각-언어 모델의 객체 환각 완화, 대한전자공학회 2026년도 추계학술대회 ([conf.theieie.org/2026f](https://conf.theieie.org/2026f/)).
+
+## License
+
+Copyright 2026 Ji-Won Kim, Hae-Won Hwang, Byung-Cheol Song. Released under the [Apache License 2.0](LICENSE), the license of LLaVA, on which this code builds.
 
 ## Acknowledgements
 

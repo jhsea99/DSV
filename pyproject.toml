@@ -7,6 +7,7 @@ name = "dsv"
 version = "1.0.0"
 description = "Mitigating Object Hallucination in Vision-Language Models via Context-Detached Self-Verification (DSV)"
 readme = "README.md"
+license = {text = "Apache-2.0"}
 requires-python = ">=3.10"
 dependencies = [
     # official LLaVA code (pins torch 2.1.2, transformers 4.37.2, tokenizers 0.15.1, accelerate 0.21.0)
